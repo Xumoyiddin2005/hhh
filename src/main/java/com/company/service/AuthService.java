@@ -3,6 +3,7 @@ package com.company.service;
 import com.company.config.CustomUserDetails;
 import com.company.dto.AuthDTO;
 import com.company.dto.CurrentUserDTO;
+import com.company.dto.JwtDTO;
 import com.company.dto.LoginDTO;
 import com.company.util.CurrentUserUtil;
 import com.company.util.JwtUtil;
@@ -20,17 +21,23 @@ public class AuthService {
     public LoginDTO login(AuthDTO authDTO) {
         Authentication authenticate = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
+
         CustomUserDetails user = (CustomUserDetails) authenticate.getPrincipal();
         String id = user.getId();
         String username = user.getUsername();
 
-        LoginDTO dto = new LoginDTO();
-        dto.setJwt(JwtUtil.encode(id));
-        dto.setUsername(username);
-        return dto;
+        JwtDTO jwtDTO = new JwtDTO();
+        jwtDTO.setId(user.getId());
+        jwtDTO.setRole(user.getRole().name());
+
+        LoginDTO responseDTO = new LoginDTO();
+        responseDTO.setJwt(JwtUtil.encode(jwtDTO));
+        responseDTO.setUsername(username);
+        responseDTO.setRole(user.getRole());
+        return responseDTO;
     }
 
-    public CurrentUserDTO getCurrentUser(){
+    public CurrentUserDTO getCurrentUser() {
         CurrentUserDTO dto = new CurrentUserDTO();
         dto.setId(CurrentUserUtil.currentUser().getId());
         dto.setUsername(CurrentUserUtil.currentUser().getUsername());

@@ -1,5 +1,6 @@
-POST localhost:8080/company/public/create
+POST localhost:8080/company/adm/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NTgzMTg1OTksImV4cCI6MTY1ODUzNDU5OSwiaXNzIjoiTWF6Z2kgcHJvZHVjdGlvbiIsImlkIjoiOGE4YTgyOTE4MjFiNTkyYjAxODIxYjU5M2U3OTAwMDAiLCJyb2xlIjoiUk9MRV9BRE1JTiJ9.HTLqk9KyRpBBT54De7UGyO6mH-iN986sbTubi2IlmCA
 
 {
   "name": "QORA bank",

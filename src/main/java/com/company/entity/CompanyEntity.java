@@ -4,6 +4,7 @@ import com.company.enums.GeneralRole;
 import com.company.enums.GeneralStatus;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "company")
-public class CompanyEntity extends BaseEntity{
+public class CompanyEntity extends BaseEntity {
 
     @Column
     private String name;
@@ -30,5 +31,10 @@ public class CompanyEntity extends BaseEntity{
     private String username;
     @Column(nullable = false)
     private String password;
+
+    @Column() // nullable = false
+    private Double servicePercentage;
+
+    private CardEntity cardEntity;
 
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -31,15 +33,12 @@ public class SpringConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources",
             "/swagger-resources/**"
     };
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // Authentication
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
-       /* auth.inMemoryAuthentication()
-                .withUser("Ali").password("{bcrypt}$2a$10$V93CWoH3NxAPC7VzPd9ouuU8PWvZWYdoo94H3HOZ8kFSkBAvYssEe").roles("ADMIN")
-                .and()
-                .withUser("Vali").password("{noop}valish123").roles("PROFILE");*/
     }
 
     @Override
@@ -52,7 +51,9 @@ public class SpringConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*/moder/**").hasRole("MODERATOR")
                 .antMatchers("/*/bank/**").hasRole("BANK")
                 .antMatchers("/*/pay/**").hasRole("PAYMENT")
-                .antMatchers("/*/company/**").hasAnyRole("PAYMENT", "BANK")
+                .antMatchers("/api/v1/card/**").hasAnyRole("PAYMENT", "ADMIN", "BANK")
+                .antMatchers("/api/v1/company/**").hasRole("ADMIN")
+//                .antMatchers("/*/company/**").hasAnyRole("PAYMENT", "BANK")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
